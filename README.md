@@ -1,0 +1,1 @@
+# FiapTechChallenge.Contatos.Azure.Consulta
