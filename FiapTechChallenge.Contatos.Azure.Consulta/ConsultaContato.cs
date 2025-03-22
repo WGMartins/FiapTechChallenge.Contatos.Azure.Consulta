@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Npgsql;
 using System;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FiapTechChallenge.Contatos.Azure.Consulta
@@ -15,11 +16,11 @@ namespace FiapTechChallenge.Contatos.Azure.Consulta
     {
         [FunctionName("ContatoPorDDD")]
         public static async Task<IActionResult> RunDdd(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
-            ILogger log)
-        {           
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "ContatoPorDDD/{ddd}")] HttpRequest req,
+            string ddd, ILogger log)
+        {
 
-            if (!int.TryParse(req.Query["ddd"], out int ddd))
+            if (!int.TryParse(ddd, out int Ddd))
             {
                 return new BadRequestObjectResult("Parâmetro 'ddd' é obrigatório e deve ser um número válido.");
             }
@@ -37,8 +38,12 @@ namespace FiapTechChallenge.Contatos.Azure.Consulta
                                 ON c.""RegionalId"" = r.""Id""
                              WHERE r.""Ddd"" = @DDD";
 
-                var contatos = await db.QueryAsync<Contato>(sql, new { DDD = ddd });
+                var contatos = await db.QueryAsync<Contato>(sql, new { DDD = Ddd });
 
+                if(contatos.Count() == 0)
+                {
+                    return new BadRequestObjectResult("Nenhum contato encontrato");
+                }
                 return new OkObjectResult(contatos);
             }
             catch (Exception ex)
@@ -50,11 +55,11 @@ namespace FiapTechChallenge.Contatos.Azure.Consulta
 
         [FunctionName("ContatoPorId")]
         public static async Task<IActionResult> RunId(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
-            ILogger log)
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "ContatoPorId/{id}")] HttpRequest req,
+            string id, ILogger log)
         {
 
-            if (!Guid.TryParse(req.Query["id"], out Guid Id))
+            if (!Guid.TryParse(id, out Guid Id))
             {
                 return new BadRequestObjectResult("Parâmetro 'Id' é obrigatório e deve ser um Guid válido.");
             }
@@ -73,6 +78,10 @@ namespace FiapTechChallenge.Contatos.Azure.Consulta
 
                 var contato = await db.QueryAsync<Contato>(sql, new { ID = Id });
 
+                if (contato.Count() == 0)
+                {
+                    return new BadRequestObjectResult("Nenhum contato encontrato");
+                }
                 return new OkObjectResult(contato);
             }
             catch (Exception ex)
