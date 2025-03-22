@@ -13,8 +13,8 @@ namespace FiapTechChallenge.Contatos.Azure.Consulta
 {
     public static class ConsultaContato
     {
-        [FunctionName("ConsultaContato")]
-        public static async Task<IActionResult> Run(
+        [FunctionName("ContatoPorDDD")]
+        public static async Task<IActionResult> RunDdd(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
             ILogger log)
         {           
@@ -40,6 +40,40 @@ namespace FiapTechChallenge.Contatos.Azure.Consulta
                 var contatos = await db.QueryAsync<Contato>(sql, new { DDD = ddd });
 
                 return new OkObjectResult(contatos);
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Erro ao acessar o banco: {ex.Message}");
+                return new StatusCodeResult(500);
+            }
+        }
+
+        [FunctionName("ContatoPorId")]
+        public static async Task<IActionResult> RunId(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+            ILogger log)
+        {
+
+            if (!Guid.TryParse(req.Query["id"], out Guid Id))
+            {
+                return new BadRequestObjectResult("Parâmetro 'Id' é obrigatório e deve ser um Guid válido.");
+            }
+
+            try
+            {
+                using IDbConnection db = new NpgsqlConnection(Environment.GetEnvironmentVariable("POSTGRES_CONNECTION"));
+                string sql = @"
+                            SELECT c.""Id"", 
+                                   c.""Nome"", 
+                                   c.""Telefone"", 
+                                   c.""Email"", 
+                                   c.""RegionalId"" 
+                              FROM ""Contato"" c 
+                             WHERE c.""Id"" = @ID";
+
+                var contato = await db.QueryAsync<Contato>(sql, new { ID = Id });
+
+                return new OkObjectResult(contato);
             }
             catch (Exception ex)
             {
