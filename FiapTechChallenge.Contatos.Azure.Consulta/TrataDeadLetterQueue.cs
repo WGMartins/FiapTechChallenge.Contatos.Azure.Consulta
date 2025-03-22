@@ -7,7 +7,7 @@ namespace FiapTechChallenge.Contatos.Azure.Consulta
     {
         [FunctionName("TrataDeadLetterQueue")]
         public static void Run(
-            [RabbitMQTrigger("x.contato.deadletter", ConnectionStringSetting = "RABBITMQ_CONNECTION")] string inputMessage,
+            [RabbitMQTrigger("q.contato.deadletter", ConnectionStringSetting = "RABBITMQ_CONNECTION")] string inputMessage,
             ILogger log)
         {
             log.LogInformation($"Mensagem obtida da fila DeadLetter: {inputMessage}");
