@@ -48,13 +48,7 @@ namespace FiapTechChallenge.Contatos.Azure.Consulta
             }
         }
 
-        public class Contato
-        {
-            public Guid Id { get; set; }
-            public string Nome { get; set; }
-            public string Telefone { get; set; }
-            public string Email { get; set; }
-            public Guid RegionalId { get; set; }
-        }
+        public record Contato(Guid Id, string Nome, string Telefone, string Email, Guid RegionalId);
+        
     }
 }
