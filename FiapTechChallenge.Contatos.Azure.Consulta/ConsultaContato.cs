@@ -16,7 +16,7 @@ namespace FiapTechChallenge.Contatos.Azure.Consulta
     {
         [FunctionName("ContatoPorDDD")]
         public static async Task<IActionResult> RunDdd(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "ContatoPorDDD/{ddd}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ContatoPorDDD/{ddd}")] HttpRequest req,
             string ddd, ILogger log)
         {
 
@@ -55,7 +55,7 @@ namespace FiapTechChallenge.Contatos.Azure.Consulta
 
         [FunctionName("ContatoPorId")]
         public static async Task<IActionResult> RunId(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "ContatoPorId/{id}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ContatoPorId/{id}")] HttpRequest req,
             string id, ILogger log)
         {
 
