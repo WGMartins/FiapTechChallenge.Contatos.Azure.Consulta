@@ -1,4 +1,4 @@
-[![.NET](https://github.com/WGMartins/FiapTechChallenge.Contatos.Azure.Consulta/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/WGMartins/FiapTechChallenge.Contatos.Azure.Consulta/actions/workflows/dotnet.yml)
+[![.NET](https://github.com/WGMartins/FiapTechChallenge.Contatos.Azure.Consulta/actions/workflows/azure-functions-app-dotnet.yml/badge.svg?branch=main)](https://github.com/WGMartins/FiapTechChallenge.Contatos.Azure.Consulta/actions/workflows/azure-functions-app-dotnet.yml)
 
 # FIAP Tech Challenge 
 
